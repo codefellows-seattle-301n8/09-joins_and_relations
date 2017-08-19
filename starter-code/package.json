@@ -1,16 +1,25 @@
 {
   "name": "mvc-blog",
   "version": "1.0.0",
-  "description": "As we now complete our MVC conversation, we can refactor our app to use good MVC separation of concerns.",
+  "description": "thao and alec lab09",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
-  "author": "Code Fellows",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alecmac/09-joins_and_relations.git"
+  },
+  "author": "thao and alec",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alecmac/09-joins_and_relations/issues"
+  },
+  "homepage": "https://github.com/alecmac/09-joins_and_relations#readme",
   "dependencies": {
-    "express": "^4.13.3",
-    "body-parser": "^1.15.2",
-    "pg": "^6.1.2"
+    "body-parser": "^1.17.2",
+    "express": "^4.15.4",
+    "pg": "^7.1.2"
   }
 }
