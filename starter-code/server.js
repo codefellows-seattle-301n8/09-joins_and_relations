@@ -28,7 +28,7 @@ app.get('/articles', function(request, response) {
   client.query(`
     SELECT * FROM articles
     INNER JOIN authors
-    ON articles.author_id=authors.author_id;
+    ON articles.article_id=authors.author_id;
   `)
   .then(function(result) {
     response.send(result.rows);
@@ -52,7 +52,7 @@ app.post('/articles', function(request, response) {
   function queryTwo() {
     client.query(
       `SELECT author_id FROM authors
-       WHERE authors=$1;
+       WHERE author=$1;
       `, // TODO: Write a SQL query to retrieve the author_id from the authors table for the new article
       [request.body.author], // TODO: Add the author name as data for the SQL query
       function(err, result) {
@@ -64,8 +64,8 @@ app.post('/articles', function(request, response) {
 
   function queryThree(author_id) {
     client.query(
-      `INSERT INTO articles(title, author, "authorUrl", category, "publishedOn", body) VALUES($1, $2, $3, $4, $5, $6)`, // TODO: Write a SQL query to insert the new article using the author_id from our previous query
-      [request.body.title, request.body.author, request.body.authorUrl, request.body.category, request.body.publishedOn, request.body.body], // TODO: Add the data from our new article, including the author_id, as data for the SQL query.
+      `INSERT INTO articles(title, category, "publishedOn", body) VALUES($1, $2, $3, $4) WHERE author_id=$5`, // TODO: Write a SQL query to insert the new article using the author_id from our previous query
+      [request.body.title, request.body.category, request.body.publishedOn, request.body.body, request.param.id], // TODO: Add the data from our new article, including the author_id, as data for the SQL query.
       function(err) {
         if (err) console.error(err);
         response.send('insert complete');
