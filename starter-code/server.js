@@ -6,7 +6,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 3000;
 const app = express();
-const conString = 'postgres://hanhthaoluu@localhost:5432/blog301';// TODO: Don't forget to set your own conString
+const conString = 'postgres://postgres:1234@localhost:5432/blog301'; // TODO: Don't forget to set your own conString
 const client = new pg.Client(conString);
 client.connect();
 client.on('error', function(error) {
@@ -60,7 +60,7 @@ app.post('/articles', function(request, response) {
 
   function queryThree(author_id) {
     client.query(
-      `INSERT INTO articles(author_id, title, category, "publishedOn", body) VALUES ($1, $2, $3, $4, $5)`, // TODO: Write a SQL query to insert the new article using the author_id from our previous query
+      `INSERT INTO articles(author_id, title, category, "publishedOn", body) VALUES($1, $2, $3, $4, $5);` // TODO: Write a SQL query to insert the new article using the author_id from our previous query
       [author_id, request.body.title, request.body.category, request.body.publishedOn, request.body.body], // TODO: Add the data from our new article, including the author_id, as data for the SQL query.
       function(err) {
         if (err) console.error(err);
@@ -75,16 +75,21 @@ app.put('/articles/:id', function(request, response) {
   // an author_id property, so we can reference it from the request.body.
   // TODO: Add the required values from the request as data for the SQL query to interpolate
   client.query(
-    ``,
-    []
+    `UPDATE authors 
+    SET author=$1, "authorURL"=$2
+    WHERE author_id=$3
+    `,
+    [request.body.author, request.body.authorUrl, request.body.author_id]
   )
   .then(function() {
     // TODO: Write a SQL query to update an article record. Keep in mind that article records
     // now have an author_id, in addition to title, category, publishedOn, and body.
     // TODO: Add the required values from the request as data for the SQL query to interpolate
     client.query(
-      ``,
-      []
+      `UPDATE articles
+      SET author_id=$1, title=$2, category=$3, "publishedOn"=$4, body=$5 
+      WHERE article_id=$6`,
+      [request.body.author_id, request.body.title, request.body.category, request.body.publishedOn, request.body.body, request.params.id]
     )
   })
   .then(function() {
