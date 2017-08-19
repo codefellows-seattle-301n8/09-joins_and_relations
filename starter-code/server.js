@@ -6,7 +6,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 3000;
 const app = express();
-const conString = 'postgres://joelepstein@localhost:5432/301-blog';// TODO: Don't forget to set your own conString
+const conString = 'postgres://joelepstein@localhost:5432/301blog';// TODO: Don't forget to set your own conString
 const client = new pg.Client(conString);
 client.connect();
 client.on('error', function(error) {
@@ -62,7 +62,7 @@ app.post('/articles', function(request, response) {
   function queryThree(author_id) {
     client.query(
       `INSERT INTO articles(author_id, title, category, "publishedOn", body) VALUES ($1, $2, $3, $4, $5);`, // TODO: Write a SQL query to insert the new article using the author_id from our previous query
-      [author_id, request.body.title, request.body.category, request.body.publishedOn, requrest.body.body], // TODO: Add the data from our new article, including the author_id, as data for the SQL query.
+      [author_id, request.body.title, request.body.category, request.body.publishedOn, request.body.body], // TODO: Add the data from our new article, including the author_id, as data for the SQL query.
       function(err) {
         if (err) console.error(err);
         response.send('insert complete');
@@ -79,7 +79,7 @@ app.put('/articles/:id', function(request, response) {
     `UPDATE authors
     SET author=$1, "authorUrl"=$2
     WHERE author_id=$3;`,
-    [request.body.author, request.body.authorUrl, requerst.body.author_id]
+    [request.body.author, request.body.authorUrl, request.body.author_id]
   )
   .then(function() {
     // TODO: Write a SQL query to update an article record. Keep in mind that article records
