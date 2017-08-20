@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 3000;
 const app = express();
 // TODO: Don't forget to set your own conString
-const conString = 'postgres://postgres:Skrillexfan7@localhost:5432/kilovolt';
+const conString = 'postgres://localhost:5432/kilovolt';
 const client = new pg.Client(conString);
 client.connect();
 client.on('error', function(error) {
@@ -42,7 +42,7 @@ app.get('/articles', function(request, response) {
 app.post('/articles', function(request, response) {
   client.query(
     'INSERT INTO authors(author, "authorUrl") VALUES($1, $2) ON CONFLICT DO NOTHING', // TODO: Write a SQL query to insert a new author, ON CONFLICT DO NOTHING
-    [request.body.author, request.body.authorUrl], // TODO: Add the author and "authorUrl" as data for the SQL query
+    [request.body.author, request.body.authorUrl],// TODO: Add the author and "authorUrl" as data for the SQL query
     function(err) {
       if (err) console.error(err)
       queryTwo() // This is our second query, to be executed when this first query is complete.
@@ -88,17 +88,35 @@ app.put('/articles/:id', function(request, response) {
   // TODO: Write a SQL query to update an author record. Remember that our articles now have
   // an author_id property, so we can reference it from the request.body.
   // TODO: Add the required values from the request as data for the SQL query to interpolate
+  console.log('Im daring');
   client.query(
-    ``,
-    []
+    `UPDATE authors
+    SET
+      author=$1, "authorUrl"=$2
+    WHERE author_id=$3`
+    [
+      request.body.author,
+      request.body.authorUrl,
+      request.body.author_id
+    ]
   )
   .then(function() {
     // TODO: Write a SQL query to update an article record. Keep in mind that article records
     // now have an author_id, in addition to title, category, publishedOn, and body.
     // TODO: Add the required values from the request as data for the SQL query to interpolate
     client.query(
-      ``,
-      []
+      `UPDATE articles
+      SET
+        title=$1, category=$2, "publishedOn"=$3, body=$4, author_id=$5
+      WHERE article_id=$6`
+      [
+      request.body.title,
+      request.body.category,
+      request.body.publishedOn,
+      request.body.body,
+      request.body.author_id,
+      request.param.id
+    ]
     )
   })
   .then(function() {
